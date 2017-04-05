@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="dynamictable" >
+<!-- 查询设备记录 -->
+<select id="dynamicinfobig" resultType="java.util.Map" parameterType="java.util.Map" statementType="STATEMENT">
+select b.dname as '设备名称', ${field},a.relng,a.relat,a.deviceid  from ${tablename} a,tab_device b where a.deviceid=b.deviceid 
+</select>
+<!--根据时间段查询轨迹点 -->
+<select id="selectPath" resultType="java.util.Map" parameterType="java.util.Map" statementType="STATEMENT">
+SELECT 
+	${field},relng,relat,deviceid
+from ${tablename} WHERE DEVICEID = '${deviceid}'	
+	<![CDATA[ 
+	and DTIME >= ${stime} and DTIME<= ${etime}; 
+	]]>
+</select>
+<!--查询设备最新信息  -->
+<select id="dynamicinfo" resultType="java.util.Map" parameterType="java.util.Map" statementType="STATEMENT">
+select ${field} ,b.deviceid  from ${tablename} a ,tab_device b where a.deviceid=b.deviceid
+</select>
+<!--查询报警记录  -->
+
+<delete id="deleteByDeveieid"  parameterType="java.util.Map" statementType="STATEMENT">
+ delete from ${tabbigname}
+    where DEVICEID = ${deviceid}
+</delete>
+<!--接口需要用到的轨迹     车  -->
+<select id="interfacePath" resultType="java.util.Map" parameterType="java.util.Map" statementType="STATEMENT">
+SELECT 
+	lng,lat,dangle,ptime,deviceid,carspeed
+from ${tablename} WHERE DEVICEID = '${deviceid}'	
+	<![CDATA[ 
+	and DTIME >= ${stime} and DTIME <= ${etime}; 
+	]]>
+</select>
+<!--接口需要用到的轨迹 ——————人  -->
+<select id="interfacePath2" resultType="java.util.Map" parameterType="java.util.Map" statementType="STATEMENT">
+SELECT 
+	lng,lat,dangle,ptime,deviceid
+from ${tablename} WHERE DEVICEID = '${deviceid}'	
+	<![CDATA[ 
+	and DTIME >= ${stime} and DTIME <= ${etime}; 
+	]]>
+</select>
+</mapper>
